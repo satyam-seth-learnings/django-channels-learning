@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <h1>Count Page</h1>
+    <script>
+      // var ws = new WebSocket('ws://127.0.0.1:8000/ws/sc/');
+      var ws = new WebSocket("ws://127.0.0.1:8000/ws/ac/");
+
+      // using properties
+      // ws.onopen = function () {
+      //     console.log('WebSocket Connection Open...');
+      //     ws.send('Hi, Message From Client...');
+      // }
+
+      // ws.onmessage = function () {
+      //     console.log('Message Received From Server...', event);
+      // }
+
+      // ws.onerror = function () {
+      //     console.log('WebSocket Error Occurred...', event);
+      // }
+
+      // ws.onclose = function () {
+      //     console.log('WebSocket Connection Closed...', event);
+      // }
+
+      // using events
+      ws.addEventListener("open", (event) => {
+        console.log("WebSocket Connection Open...", event);
+        ws.send("Hi, Message From Client...");
+      });
+
+      ws.addEventListener("message", (event) => {
+        console.log("Message Received From Server...", event);
+      });
+
+      ws.addEventListener("error", (event) => {
+        console.log("WebSocket Error Occurred...", event);
+      });
+
+      ws.addEventListener("close", (event) => {
+        console.log("WebSocket Connection Closed...", event);
+      });
+    </script>
+  </body>
+</html>
