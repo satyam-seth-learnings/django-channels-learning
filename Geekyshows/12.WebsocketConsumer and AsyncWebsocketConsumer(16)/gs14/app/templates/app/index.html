@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Group Name: {{groupname}}</h1>
+    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <input id="chat-message-input" type="text" size="100"><br>
+    <input id="chat-message-submit" type="button" value="Send">
+
+    {{groupname|json_script:"group-name"}}
+
+    <script>
+        const groupName = JSON.parse(document.getElementById('group-name').textContent);
+        console.log(groupName);
+
+        // var ws = new WebSocket(
+        //     'ws://'
+        //     + window.location.host
+        //     + '/ws/wsc/'
+        //     + groupName
+        //     + '/'
+        // );
+        var ws = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/awsc/'
+            + groupName
+            + '/'
+        );
+
+        ws.onopen = function () {
+            console.log('Websocket Connection open...');
+            // ws.send('Hi From Client');
+        };
+        ws.onmessage = function () {
+            // console.log('Message Received From Server...', event);
+            console.log('Message Received From Server...', event.data);
+            const data = JSON.parse(event.data);
+            console.log('Parsed Data...', data);
+            document.querySelector('#chat-log').value += (data.msg + '\n');
+        };
+        ws.onclose = function () {
+            console.log('Websocket Connection Closed Unexpectedly...');
+        };
+
+        document.getElementById('chat-message-submit').onclick = function (event) {
+            const messageInputDom = document.getElementById('chat-message-input');
+            const message = messageInputDom.value;
+            ws.send(JSON.stringify({
+                'msg': message
+            }));
+            messageInputDom.value = '';
+        }
+    </script>
+</body>
+
+</html>
